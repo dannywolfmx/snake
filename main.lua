@@ -1,21 +1,4 @@
-
-snakePart1 = {
-    x = 100,
-    y = 100,
-    size = 100,
-}
-snakePart2 = {
-    x = 100,
-    y = 200,
-    size = 100,
-}
-
-snakeDirection = "up"
-snakeMove = 100
-
-snake = {
-    snakePart1, snakePart2,
-}
+local snake = require("snake")
 
 apple = {
     x = 100,
@@ -23,8 +6,14 @@ apple = {
     size = 100,
 }
 
+local snakeObj
+
 timer = 0
 moveInterval = 1 -- 1 segundo
+
+function love.load()
+    snakeObj = snake.new(100, 100)
+end
 
 function love.conf(t)
     t.window.vsync = 1
@@ -35,21 +24,14 @@ function love.update(dt)
 
     if timer >= moveInterval then
         timer = 0
-        moveSnake(snake)
+        snakeObj = snake.addTail(snakeObj)
+        snakeObj = snake.move(snakeObj)
     end
 end
 
 function love.draw()
-    drawSnake(snake)
-end
-
-function drawSnake(snake)
-    love.graphics.setColor(0,1,0)
-    for i, part in ipairs(snake) do
-        love.graphics.rectangle("fill", part.x , part.y , part.size, part.size)
-    end
+    snake.draw(snakeObj)
     drawRandomApple()
-    love.graphics.setColor(1,1,1)
 end
 
 function drawRandomApple()
@@ -62,28 +44,3 @@ function drawRandomApple()
     love.graphics.rectangle("fill", apple.x , apple.y , apple.size, apple.size)
     love.graphics.setColor(1,1,1)
 end
-
-function moveSnake(snake)
-    lastPosition = {
-        x = 0,
-        y = 0,
-    }
-    for i, part in ipairs(snake) do
-        if i == 1 then
-            lastPosition.x = part.x
-            lastPosition.y = part.y
-            part.x = part.x + snakeMove
-        else
-            keepLastPosition ={
-                x = lastPosition.x,
-                y = lastPosition.y
-            }
-            lastPosition.x = part.x
-            lastPosition.y = part.y
-            part.x = keepLastPosition.x
-            part.y = keepLastPosition.y
-        end
-    end
-end
-
-
