@@ -18,14 +18,33 @@ end
 
 function snake.draw(snakeObj)
     -- color green
-    love.graphics.setColor(0,1,0)
+    love.graphics.setColor(0,0.5,0)
 
     -- draw the head
-    love.graphics.rectangle("fill", snakeObj.head.x , snakeObj.head.y , size, size)
+    love.graphics.rectangle("fill", snakeObj.head.x , snakeObj.head.y , size, size, 10, 10)
+
+    -- border
+    love.graphics.setColor(0,1,0)
+    love.graphics.setLineWidth(2)
+    love.graphics.rectangle("line", snakeObj.head.x , snakeObj.head.y , size, size, 10, 10)
+
+    --reset the line
+    love.graphics.setLineWidth(1)
+
 
     -- draw the tail
     for i, part in ipairs(snakeObj.tail) do
-        love.graphics.rectangle("fill", part.x , part.y , size, size)
+        -- color green
+        love.graphics.setColor(0,0.2,0)
+
+        love.graphics.rectangle("fill", part.x , part.y , size, size, 10, 10)
+
+        love.graphics.setColor(0,1,0)
+        love.graphics.setLineWidth(2)
+        love.graphics.rectangle("line", part.x , part.y , size, size, 10, 10)
+
+        --reset the line
+        love.graphics.setLineWidth(1)
     end
 
     love.graphics.setColor(1,1,1)

@@ -9,7 +9,7 @@ apple = {
 local snakeObj
 
 timer = 0
-moveInterval = 1 -- 1 segundo
+moveInterval = 2 -- 4 segundo
 
 function love.load()
     snakeObj = snake.new(100, 100)
