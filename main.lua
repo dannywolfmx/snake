@@ -1,18 +1,19 @@
 local snake = require("snake")
+local Apple = require("Apple")
 
-apple = {
-    x = 100,
-    y = 100,
-    size = 100,
-}
 
 local snakeObj
+local appleObj
 
 timer = 0
-moveInterval = 2 -- 4 segundo
+moveInterval = 0.75 -- 0.75 segundos
 
 function love.load()
+    -- Seed the random number generator
+    math.randomseed(os.time())
+
     snakeObj = snake.new(100, 100)
+    appleObj = Apple.randomizePosition(love.graphics.getWidth(), love.graphics.getHeight())
 end
 
 function love.conf(t)
@@ -24,23 +25,30 @@ function love.update(dt)
 
     if timer >= moveInterval then
         timer = 0
-        snakeObj = snake.addTail(snakeObj)
         snakeObj = snake.move(snakeObj)
+        -- Check if the snake eats the apple
+        if snake.checkAppleCollision(snakeObj, appleObj) then
+            snake.addTail(snakeObj)
+            appleObj = Apple.randomizePosition(love.graphics.getWidth(), love.graphics.getHeight())
+        end
     end
 end
 
 function love.draw()
     snake.draw(snakeObj)
-    drawRandomApple()
+    Apple.draw(appleObj)
 end
 
-function drawRandomApple()
-    love.graphics.setColor(1,0,0)
-    apple = {
-        x = 200,
-        y = 200,
-        size = 50,
-    }
-    love.graphics.rectangle("fill", apple.x , apple.y , apple.size, apple.size)
-    love.graphics.setColor(1,1,1)
+-- function to move with the arrows key
+
+function love.keypressed(key)
+    if key == "up" and snakeObj.direction ~= "down" then
+        snakeObj.direction = "up"
+    elseif key == "down" and snakeObj.direction ~= "up" then
+        snakeObj.direction = "down"
+    elseif key == "left" and snakeObj.direction ~= "right" then
+        snakeObj.direction = "left"
+    elseif key == "right" and snakeObj.direction ~= "left" then
+        snakeObj.direction = "right"
+    end
 end

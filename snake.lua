@@ -1,6 +1,6 @@
 local snake = {}
 
-local size = 100
+local size = 50
 
 function snake.new(x, y)
     return {
@@ -13,8 +13,6 @@ function snake.new(x, y)
         moveSize = size,
     }
 end
-
-
 
 function snake.draw(snakeObj)
     -- color green
@@ -50,13 +48,27 @@ function snake.draw(snakeObj)
     love.graphics.setColor(1,1,1)
 end
 
+-- check if the snake eats the apple
+function snake.checkAppleCollision(snakeObj, apple)
+    return snakeObj.head.x == apple.x and snakeObj.head.y == apple.y
+end
+
 function snake.move(snakeObj)
     lastPosition = {
         x = snakeObj.head.x,
         y = snakeObj.head.y,
     }
 
-    snakeObj.head.x = snakeObj.head.x + size
+    -- Check the direction
+    if snakeObj.direction == "up" then
+        snakeObj.head.y = snakeObj.head.y - size
+    elseif snakeObj.direction == "down" then
+        snakeObj.head.y = snakeObj.head.y + size
+    elseif snakeObj.direction == "left" then
+        snakeObj.head.x = snakeObj.head.x - size
+    elseif snakeObj.direction == "right" then
+        snakeObj.head.x = snakeObj.head.x + size
+    end
 
     for i, part in ipairs(snakeObj.tail) do
         keepLastPosition ={
